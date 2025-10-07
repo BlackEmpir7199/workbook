@@ -9,11 +9,19 @@ import { serve } from "inngest/express";
 
 const app = express();
 app.use(express.json());
-app.use(cors);
+
+app.use(
+  cors({
+    credentials: true,
+  })
+);
+
 // need the blow one to access req.auth | or else it will be undefined always
 app.use(clerkMiddleware());
 
 app.use("/api/inngest", serve({ client: inngest, functions }));
+
+app.get("/", (req, res) => res.send("da"));
 
 const PORT = ENV.PORT;
 
