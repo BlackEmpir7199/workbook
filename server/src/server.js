@@ -21,7 +21,11 @@ app.use(clerkMiddleware());
 
 app.use("/api/inngest", serve({ client: inngest, functions }));
 
-app.get("/", (req, res) => res.send("da"));
+app.get("/", (req, res) =>
+  res.send(
+    "Hey am the backend! - That's Great You Found Me - Now Give me ur JWT"
+  )
+);
 
 const PORT = ENV.PORT;
 
