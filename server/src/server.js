@@ -4,8 +4,7 @@ import { ENV } from "./config/env.js";
 import { connectToDB } from "./config/db.js";
 import cors from "cors";
 import { clerkMiddleware } from "@clerk/express";
-import { inngest } from "./config/inngest.js";
-import { functions } from "./config/inngest.js";
+import { inngest, functions } from "./config/inngest.js";
 import { serve } from "inngest/express";
 import chatRoutes from "./routes/chat.route.js";
 
@@ -32,14 +31,14 @@ app.get("/", (req, res) =>
   )
 );
 
-Sentry.setupExpressErrorHandler(app);
-
 // sentry demo
-app.get("/sentry-error", (req,res) => {
-  throw new Error("Sentry Demom Check Up !!");
-})
+app.get("/debug-sentry", (req, res) => {
+  throw new Error("Sentry Demo Check Up !!");
+}); 
 
 const PORT = ENV.PORT;
+
+Sentry.setupExpressErrorHandler(app);
 
 const startServer = async () => {
   try {
