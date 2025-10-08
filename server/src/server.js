@@ -1,3 +1,4 @@
+import "../instrument.mjs";
 import express from "express";
 import { ENV } from "./config/env.js";
 import { connectToDB } from "./config/db.js";
@@ -7,6 +8,8 @@ import { inngest } from "./config/inngest.js";
 import { functions } from "./config/inngest.js";
 import { serve } from "inngest/express";
 import chatRoutes from "./routes/chat.route.js";
+
+import * as Sentry from "@sentry/node";
 
 const app = express();
 app.use(express.json());
@@ -28,6 +31,13 @@ app.get("/", (req, res) =>
     "Hey am the backend! - That's Great You Found Me - Now Give me ur JWT"
   )
 );
+
+Sentry.setupExpressErrorHandler(app);
+
+// sentry demo
+app.get("/sentry-error", (req,res) => {
+  throw new Error("Sentry Demom Check Up !!");
+})
 
 const PORT = ENV.PORT;
 
