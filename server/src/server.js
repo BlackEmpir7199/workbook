@@ -6,6 +6,7 @@ import { clerkMiddleware } from "@clerk/express";
 import { inngest } from "./config/inngest.js";
 import { functions } from "./config/inngest.js";
 import { serve } from "inngest/express";
+import chatRoutes from "./routes/chat.route.js";
 
 const app = express();
 app.use(express.json());
@@ -20,6 +21,7 @@ app.use(
 app.use(clerkMiddleware());
 
 app.use("/api/inngest", serve({ client: inngest, functions }));
+app.use("/api/chat", chatRoutes);
 
 app.get("/", (req, res) =>
   res.send(
