@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 import { Inngest } from "inngest";
 import { connectToDB } from "./db.js";
+import { deleteStreamUser, upsertStreamUser } from "./stream.js";
 
 export const inngest = new Inngest({ id: "workbook" });
 
@@ -18,14 +19,21 @@ const syncUser = inngest.createFunction(
 
       await connectToDB();
 
-      await User.create({
+      const newUser = await User.create({
         clerkId: id,
-        name: first_name + " " + last_name,
+        name: first_name + (first_name === "" ? last_name : " " + last_name),
         email: email_addresses[0]?.email_address,
         image: image_url,
       });
 
+      await upsertStreamUser({
+        id: newUser.clerkId.toString(),
+        name: newUser.name,
+        image: newUser.image,
+      });
+      
       console.log("Successfully created user");
+
     } catch (err) {
       console.log("Error Occured:" + err);
     }
@@ -46,6 +54,8 @@ const deleteUserFromDb = inngest.createFunction(
       await User.deleteOne({
         clerkId: id,
       });
+
+      await deleteStreamUser({id});
 
       console.log("Successfully deleted user");
     } catch (err) {

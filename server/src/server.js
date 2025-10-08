@@ -16,7 +16,7 @@ app.use(
   })
 );
 
-// need the blow one to access req.auth | or else it will be undefined always
+// need the below one to access req.auth | or else it will be undefined always
 app.use(clerkMiddleware());
 
 app.use("/api/inngest", serve({ client: inngest, functions }));
