@@ -7,22 +7,28 @@ import {
 } from "@clerk/clerk-react";
 import { HyperspaceBackground } from "@/components/ui/hyperspace-background";
 import { StarButton } from "./components/ui/star-button";
+import { Navigate, Route, Routes } from "react-router";
+import HomePage from "./pages/HomePage";
+import AuthPage from "./pages/AuthPage";
 
 export default function App() {
   return (
-    <div className="relative flex h-[100%] w-full items-center justify-center overflow-hidden bg-black flex-col">
-      <HyperspaceBackground />
-      <h1 className="font-poppins relative z-10 bg-gradient-to-br from-white to-zinc-400 bg-clip-text px-2 py-2 text-center text-3xl  lg:text-6xl font-semibold text-transparent">
-        Unlock Your WorkBook <br />
-        Where Productivy happens
-      </h1>
+    <>
+      <SignedIn>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/auth" element={<Navigate to="/" replace />} />
+        </Routes>
+      </SignedIn>
+
       <SignedOut>
-          <SignInButton mode="modal">
-          <StarButton className="rounded-3xl" >Sing In</StarButton>
-          </SignInButton >
-        </SignedOut>
-    </div>
-      /* <header>
+        <Routes>
+          <Route path="/auth" element={<AuthPage />} />
+          <Route path="*" element={<Navigate to="/auth" replace />} />
+        </Routes>
+      </SignedOut>
+    </>
+    /* <header>
         <SignedOut>
           <SignInButton />
         </SignedOut>
